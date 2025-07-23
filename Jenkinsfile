@@ -9,20 +9,18 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                dir('my-java-app') {        // <-- Change to the directory containing pom.xml
+                    bat 'mvn clean package -DskipTests'  // Use bat for Windows Jenkins agents
+                }
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
+                dir('my-java-app') {
+                    bat 'mvn test'
+                }
             }
         }
-        // Add your deploy stages here, example:
-        stage('Deploy to Dev') {
-            steps {
-                echo 'Deploying to Dev environment...'
-                // Your deploy script/commands here
-            }
-        }
+        // Add deploy stages similarly with dir('my-java-app') if needed
     }
 }
