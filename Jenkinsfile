@@ -11,9 +11,7 @@ pipeline {
 
     stage('Build') {
       steps {
-        dir('iot-sre-java-app') {
-          sh 'mvn clean package -DskipTests'
-        }
+        sh 'mvn clean package -DskipTests'
       }
     }
 
