@@ -2,6 +2,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.aliaa</groupId>
   <artifactId>hello-world-app</artifactId>
@@ -12,7 +13,12 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>3.1.5</version>
+    <relativePath/> <!-- Lookup parent from repository -->
   </parent>
+
+  <properties>
+    <java.version>21</java.version>
+  </properties>
 
   <dependencies>
     <!-- Spring Boot Web -->
@@ -20,7 +26,8 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-    <!-- Optional: Spring Boot Test -->
+
+    <!-- Spring Boot Test -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
@@ -36,4 +43,5 @@
       </plugin>
     </plugins>
   </build>
+
 </project>
