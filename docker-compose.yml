@@ -1,0 +1,8 @@
+services:
+  app:
+    image: hello-world-app:1.0
+    container_name: hello-world-app
+    ports:
+      - "8081:8080"  # hostPort:containerPort
+    restart: unless-stopped
+
