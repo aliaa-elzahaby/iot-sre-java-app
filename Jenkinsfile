@@ -1,38 +1,64 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = "iot-sre-java-app"
+        DEPLOY_DIR = "iot-sre-java-app"  // This is the nested directory with Dockerfile, etc.
+    }
+
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                bat 'mvn clean package'
+                git branch: 'develop', url: 'https://github.com/aliaa-elzahaby/iot-sre-java-app.git'
             }
         }
+
+        stage('Build') {
+            steps {
+                bat 'mvn clean package -DskipTests'
+            }
+        }
+
         stage('Test') {
             steps {
                 bat 'mvn test'
             }
         }
-        stage('Deploy to Dev') {
+
+        stage('Docker Build') {
             steps {
-                echo 'Deploying to Dev environment...'
-                // Add AWS CLI or Helm commands here
+                dir("${DEPLOY_DIR}") {
+                    bat "docker build -t ${IMAGE_NAME} ."
+                }
             }
         }
+
+        // Optional: Docker Push / AWS deploy logic here
+
+        stage('Deploy') {
+            when {
+                branch 'master'
+            }
+            steps {
+                echo 'Deploying to Staging (STG) because this is the master branch'
+                // Add Helm or kubectl here if needed
+            }
+        }
+
         stage('Deploy to Test') {
             when {
-                expression { currentBuild.currentResult == 'SUCCESS' }
+                branch 'develop'
             }
             steps {
-                echo 'Deploying to Test environment...'
+                echo 'Deploying to Test because this is the develop branch'
+                // Add kubectl / Helm to test environment here
             }
         }
-        stage('Deploy to STG') {
-            when {
-                branch 'main'
-            }
-            steps {
-                echo 'Deploying to STG environment...'
-            }
+    }
+
+    post {
+        always {
+            junit '**/target/surefire-reports/*.xml'
         }
     }
 }
