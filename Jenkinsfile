@@ -1,6 +1,7 @@
 pipeline {
     agent any
 
+<<<<<<< HEAD
     environment {
         IMAGE_NAME = "iot-sre-java-app"
         DEPLOY_DIR = "iot-sre-java-app"  // This is the nested directory with Dockerfile, etc.
@@ -60,5 +61,28 @@ pipeline {
         always {
             junit '**/target/surefire-reports/*.xml'
         }
+=======
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/aliaa-elzahaby/iot-sre-java-app.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('my-java-app') {        // <-- Change to the directory containing pom.xml
+                    bat 'mvn clean package -DskipTests'  // Use bat for Windows Jenkins agents
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('my-java-app') {
+                    bat 'mvn test'
+                }
+            }
+        }
+        // Add deploy stages similarly with dir('my-java-app') if needed
+>>>>>>> 2c40cd2877165dde65d9618e554a91372b215b2c
     }
 }
