@@ -17,17 +17,13 @@ pipeline {
 
     stage('Docker Build') {
       steps {
-        dir('iot-sre-java-app') {
-          sh 'docker build -t hello-world-app .'
-        }
+        bat 'docker build -t iot-sre-java-app .'
       }
     }
 
     stage('Docker Compose') {
       steps {
-        dir('iot-sre-java-app') {
-          sh 'docker-compose up -d'
-        }
+        bat  'docker-compose up -d'
       }
     }
   }
