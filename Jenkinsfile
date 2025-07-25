@@ -1,38 +1,36 @@
 pipeline {
-    agent any
+  agent any
 
-    stages {
-        stage('Build') {
-            steps {
-                bat 'mvn clean package'
-            }
-        }
-        stage('Test') {
-            steps {
-                bat 'mvn test'
-            }
-        }
-        stage('Deploy to Dev') {
-            steps {
-                echo 'Deploying to Dev environment...'
-                // Add AWS CLI or Helm commands here
-            }
-        }
-        stage('Deploy to Test') {
-            when {
-                expression { currentBuild.currentResult == 'SUCCESS' }
-            }
-            steps {
-                echo 'Deploying to Test environment...'
-            }
-        }
-        stage('Deploy to STG') {
-            when {
-                branch 'main'
-            }
-            steps {
-                echo 'Deploying to STG environment...'
-            }
-        }
+  stages {
+    stage('Checkout') {
+      steps {
+        git branch: 'develop',
+            url: 'https://github.com/aliaa-elzahaby/iot-sre-java-app.git'
+      }
     }
+
+    stage('Build') {
+      steps {
+        dir('iot-sre-java-app') {
+          sh 'mvn clean package -DskipTests'
+        }
+      }
+    }
+
+    stage('Docker Build') {
+      steps {
+        dir('iot-sre-java-app') {
+          sh 'docker build -t hello-world-app .'
+        }
+      }
+    }
+
+    stage('Docker Compose') {
+      steps {
+        dir('iot-sre-java-app') {
+          sh 'docker-compose up -d'
+        }
+      }
+    }
+  }
 }
