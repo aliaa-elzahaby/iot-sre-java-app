@@ -1,5 +1,0 @@
-# Created at 2025-07-25T21:31:25.786
-Boot Manifest-JAR contains absolute paths in classpath 'E:\DevOps_project\iot-sre-terraform\target\test-classes'
-Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-'other' has different root
-
